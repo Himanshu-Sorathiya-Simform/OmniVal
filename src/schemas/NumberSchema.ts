@@ -3,18 +3,17 @@ import type { Check, ErrorObject, ReturnType, ValidateReturnType } from '../type
 class NumberSchema {
 	private checks: Array<Check> = [];
 
-	constructor() {
-		this.checks.push(
-			(data: any): ReturnType =>
-				typeof data === 'number' || {
-					rule: 'type',
-					message: `typeof ${data} is not number`,
-					code: 'INVALID_TYPE',
-					meta: {
-						expected: 'number',
-						received: typeof data,
-					},
+	validateType(data: any): ReturnType {
+		return (
+			typeof data === 'number' || {
+				rule: 'type',
+				message: `typeof ${data} is not number`,
+				code: 'INVALID_TYPE',
+				meta: {
+					expected: 'number',
+					received: typeof data,
 				},
+			}
 		);
 	}
 
@@ -85,6 +84,17 @@ class NumberSchema {
 
 	validate(data: any): ValidateReturnType {
 		const errors: ErrorObject[] = [];
+
+		const answer = this.validateType(data);
+
+		if (answer !== true) {
+			errors.push(answer);
+
+			return {
+				isValid: false,
+				errors,
+			};
+		}
 
 		for (const check of this.checks) {
 			const answer = check(data);

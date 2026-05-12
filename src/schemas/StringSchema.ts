@@ -3,18 +3,17 @@ import type { Check, ErrorObject, ReturnType, ValidateReturnType } from '../type
 class StringSchema {
 	private checks: Array<Check> = [];
 
-	constructor() {
-		this.checks.push(
-			(data: any): ReturnType =>
-				typeof data === 'string' || {
-					rule: 'type',
-					message: `typeof ${data} is not string`,
-					code: 'INVALID_TYPE',
-					meta: {
-						expected: 'string',
-						received: typeof data,
-					},
+	validateType(data: any): ReturnType {
+		return (
+			typeof data === 'string' || {
+				rule: 'type',
+				message: `typeof ${data} is not string`,
+				code: 'INVALID_TYPE',
+				meta: {
+					expected: 'string',
+					received: typeof data,
 				},
+			}
 		);
 	}
 
@@ -53,6 +52,17 @@ class StringSchema {
 
 	validate(data: any): ValidateReturnType {
 		const errors: ErrorObject[] = [];
+
+		const answer = this.validateType(data);
+
+		if (answer !== true) {
+			errors.push(answer);
+
+			return {
+				isValid: false,
+				errors,
+			};
+		}
 
 		for (const check of this.checks) {
 			const answer = check(data);
