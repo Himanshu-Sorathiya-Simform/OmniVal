@@ -1,22 +1,11 @@
-interface ErrorObject {
-	rule: string;
-	message: string;
-	code: string;
-	meta: object;
-}
-
-type Return = true | ErrorObject;
-
-interface Check {
-	(...args: any[]): Return;
-}
+import type { Check, ErrorObject, ReturnType, ValidateReturnType } from '../types.js';
 
 class StringSchema {
-	private checks: Check[] = [];
+	private checks: Array<Check> = [];
 
 	constructor() {
 		this.checks.push(
-			(data: any) =>
+			(data: any): ReturnType =>
 				typeof data === 'string' || {
 					rule: 'type',
 					message: `typeof ${data} is not string`,
@@ -31,7 +20,7 @@ class StringSchema {
 
 	min(val: number) {
 		this.checks.push(
-			(data: any) =>
+			(data: any): ReturnType =>
 				data.length >= val || {
 					rule: 'min',
 					message: `length of ${data} is smaller than required ${val} length`,
@@ -47,7 +36,7 @@ class StringSchema {
 	}
 	max(val: number) {
 		this.checks.push(
-			(data: any) =>
+			(data: any): ReturnType =>
 				data.length <= val || {
 					rule: 'max',
 					message: `length of ${data} is bigger than required ${val} length`,
@@ -62,8 +51,8 @@ class StringSchema {
 		return this;
 	}
 
-	validate(data: any) {
-		const errors = [];
+	validate(data: any): ValidateReturnType {
+		const errors: ErrorObject[] = [];
 
 		for (const check of this.checks) {
 			const answer = check(data);

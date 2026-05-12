@@ -1,22 +1,11 @@
-interface ErrorObject {
-	rule:string
-	message: string;
-	code: string;
-	meta: object;
-}
-
-type Return = true | ErrorObject;
-
-interface Check {
-	(...args: any[]): Return;
-}
+import type { Check, ErrorObject, ReturnType, ValidateReturnType } from '../types.js';
 
 class NumberSchema {
-	private checks: Check[] = [];
+	private checks: Array<Check> = [];
 
 	constructor() {
 		this.checks.push(
-			(data: any) =>
+			(data: any): ReturnType =>
 				typeof data === 'number' || {
 					rule: 'type',
 					message: `typeof ${data} is not number`,
@@ -31,7 +20,7 @@ class NumberSchema {
 
 	min(val: number) {
 		this.checks.push(
-			(data: any) =>
+			(data: any): ReturnType =>
 				data >= val || {
 					rule: 'min',
 					message: `${data} is smaller than ${val}`,
@@ -47,7 +36,7 @@ class NumberSchema {
 	}
 	max(val: number) {
 		this.checks.push(
-			(data: any) =>
+			(data: any): ReturnType =>
 				data <= val || {
 					rule: 'max',
 					message: `${data} is bigger than ${val}`,
@@ -63,7 +52,7 @@ class NumberSchema {
 	}
 	positive() {
 		this.checks.push(
-			(data: any) =>
+			(data: any): ReturnType =>
 				data > 0 || {
 					rule: 'positive',
 					message: `${data} is not positive`,
@@ -79,7 +68,7 @@ class NumberSchema {
 	}
 	negative() {
 		this.checks.push(
-			(data: any) =>
+			(data: any): ReturnType =>
 				data < 0 || {
 					rule: 'negative',
 					message: `${data} is not negative`,
@@ -94,8 +83,8 @@ class NumberSchema {
 		return this;
 	}
 
-	validate(data: any) {
-		const errors = [];
+	validate(data: any): ValidateReturnType {
+		const errors: ErrorObject[] = [];
 
 		for (const check of this.checks) {
 			const answer = check(data);
