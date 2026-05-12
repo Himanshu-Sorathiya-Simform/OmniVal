@@ -1,0 +1,37 @@
+{
+	"compilerOptions": {
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"target": "es2024",
+		"types": [],
+
+		"rootDir": "./src",
+		"outDir": "./dist",
+
+		"sourceMap": true,
+		"declaration": true,
+		"declarationMap": true,
+
+		"allowUnreachableCode": false,
+		"alwaysStrict": true,
+		"noFallthroughCasesInSwitch": true,
+		"exactOptionalPropertyTypes": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"strictNullChecks": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"strictPropertyInitialization": true,
+
+		"strict": true,
+		"verbatimModuleSyntax": true,
+		"noUncheckedSideEffectImports": true,
+		"moduleDetection": "force",
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
+}

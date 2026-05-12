@@ -1,0 +1,40 @@
+{
+	"name": "@himanshu-sorathiya/omnival",
+	"version": "1.0.0",
+	"description": "OmniVal, Your all in one validator package for doing any kind of validation with great DX by providing advance custom options.",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Himanshu-Sorathiya-Simform/OmniVal.git"
+	},
+	"keywords": [
+		"omni",
+		"validator",
+		"validators",
+		"validation"
+	],
+	"author": "Himanshu Sorathiya",
+	"license": "ISC",
+	"type": "module",
+	"bugs": {
+		"url": "https://github.com/Himanshu-Sorathiya-Simform/OmniVal/issues"
+	},
+	"homepage": "https://github.com/Himanshu-Sorathiya-Simform/OmniVal#readme",
+	"devDependencies": {
+		"typescript": "^6.0.3"
+	}
+}
