@@ -11,6 +11,15 @@ class NumberSchema extends BasePrimitiveSchema {
 	protected checks: Array<CheckFn> = [];
 
 	override validateType(data: any): CheckFnReturnType {
+		if (Number.isNaN(data)) {
+			return {
+				rule: 'type',
+				code: 'INVALID_TYPE',
+				message: `(${data}) is not a ${this.type}`,
+				meta: { expected: this.type, received: typeof data },
+			};
+		}
+
 		return super.validateType(data);
 	}
 
