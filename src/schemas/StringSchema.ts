@@ -1,20 +1,12 @@
-import type { Check, ErrorObject, ReturnType, ValidateReturnType } from '../types.js';
+import type { Check, ReturnType, ValidateReturnType } from '../types.js';
+import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
-class StringSchema {
+class StringSchema extends BasePrimitiveSchema {
+	private type: string = 'string';
 	private checks: Array<Check> = [];
 
-	validateType(data: any): ReturnType {
-		return (
-			typeof data === 'string' || {
-				rule: 'type',
-				message: `typeof ${data} is not string`,
-				code: 'INVALID_TYPE',
-				meta: {
-					expected: 'string',
-					received: typeof data,
-				},
-			}
-		);
+	override validateType(data: any): ReturnType {
+		return super.validateType(this.type, data);
 	}
 
 	min(val: number) {
@@ -50,39 +42,8 @@ class StringSchema {
 		return this;
 	}
 
-	validate(data: any): ValidateReturnType {
-		const errors: ErrorObject[] = [];
-
-		const answer = this.validateType(data);
-
-		if (answer !== true) {
-			errors.push(answer);
-
-			return {
-				isValid: false,
-				errors,
-			};
-		}
-
-		for (const check of this.checks) {
-			const answer = check(data);
-
-			if (answer !== true) {
-				errors.push(answer);
-			}
-		}
-
-		if (errors.length === 0) {
-			return {
-				isValid: true,
-				data,
-			};
-		}
-
-		return {
-			isValid: false,
-			errors,
-		};
+	override validate(data: any): ValidateReturnType {
+		return super.validate(this.checks, data);
 	}
 }
 

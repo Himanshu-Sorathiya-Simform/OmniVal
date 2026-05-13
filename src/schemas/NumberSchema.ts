@@ -1,20 +1,12 @@
-import type { Check, ErrorObject, ReturnType, ValidateReturnType } from '../types.js';
+import type { Check, ReturnType, ValidateReturnType } from '../types.js';
+import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
-class NumberSchema {
+class NumberSchema extends BasePrimitiveSchema {
+	private type: string = 'number';
 	private checks: Array<Check> = [];
 
-	validateType(data: any): ReturnType {
-		return (
-			typeof data === 'number' || {
-				rule: 'type',
-				message: `typeof ${data} is not number`,
-				code: 'INVALID_TYPE',
-				meta: {
-					expected: 'number',
-					received: typeof data,
-				},
-			}
-		);
+	override validateType(data: any): ReturnType {
+		return super.validateType(this.type, data);
 	}
 
 	min(val: number) {
@@ -82,39 +74,8 @@ class NumberSchema {
 		return this;
 	}
 
-	validate(data: any): ValidateReturnType {
-		const errors: ErrorObject[] = [];
-
-		const answer = this.validateType(data);
-
-		if (answer !== true) {
-			errors.push(answer);
-
-			return {
-				isValid: false,
-				errors,
-			};
-		}
-
-		for (const check of this.checks) {
-			const answer = check(data);
-
-			if (answer !== true) {
-				errors.push(answer);
-			}
-		}
-
-		if (errors.length === 0) {
-			return {
-				isValid: true,
-				data,
-			};
-		}
-
-		return {
-			isValid: false,
-			errors,
-		};
+	override validate(data: any): ValidateReturnType {
+		return super.validate(this.checks, data);
 	}
 }
 
