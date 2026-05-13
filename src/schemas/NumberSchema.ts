@@ -10,7 +10,7 @@ class NumberSchema extends BasePrimitiveSchema {
 	protected type: string = 'number';
 	protected checks: Array<CheckFn> = [];
 
-	override validateType(data: any): CheckFnReturnType {
+	protected override validateType(data: any): CheckFnReturnType {
 		if (Number.isNaN(data)) {
 			return {
 				rule: 'type',
@@ -52,6 +52,24 @@ class NumberSchema extends BasePrimitiveSchema {
 					code: customCode ?? 'TOO_LONG',
 					meta: {
 						expected: `<= ${val}`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	equals(val: number, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				data === val || {
+					rule: 'equals',
+					message: customMessage ?? `${data} is not equal to ${val}`,
+					code: customCode ?? 'NOT_EQUAL',
+					meta: {
+						expected: `Equals to ${val}`,
 						received: data,
 					},
 				},

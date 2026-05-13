@@ -2,7 +2,7 @@
 	"name": "@himanshu-sorathiya/omnival",
 	"version": "1.1.0",
 	"description": "OmniVal, Your all in one validator package for doing any kind of validation with great DX by providing advance custom options.",
-	"main": "./dist/index.js",
+	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"files": [
@@ -11,11 +11,12 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js"
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
 		}
 	},
 	"scripts": {
-		"build": "tsc"
+		"build": "npx tsup src/index.ts --format esm,cjs --clean && npx tsc --emitDeclarationOnly --outDir dist "
 	},
 	"repository": {
 		"type": "git",
@@ -35,6 +36,7 @@
 	},
 	"homepage": "https://github.com/Himanshu-Sorathiya-Simform/OmniVal#readme",
 	"devDependencies": {
+		"tsup": "^8.5.1",
 		"typescript": "^6.0.3"
 	}
 }
