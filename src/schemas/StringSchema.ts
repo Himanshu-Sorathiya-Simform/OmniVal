@@ -2,11 +2,11 @@ import type { Check, ReturnType, ValidateReturnType } from '../types.js';
 import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class StringSchema extends BasePrimitiveSchema {
-	private type: string = 'string';
-	private checks: Array<Check> = [];
+	protected type: string = 'string';
+	protected checks: Array<Check> = [];
 
-	override validateType(data: any): ReturnType {
-		return super.validateType(this.type, data);
+	protected override validateType(data: any): ReturnType {
+		return super.validateType(data);
 	}
 
 	min(val: number) {
@@ -43,7 +43,7 @@ class StringSchema extends BasePrimitiveSchema {
 	}
 
 	override validate(data: any): ValidateReturnType {
-		return super.validate(this.checks, data);
+		return super.validate(data);
 	}
 }
 

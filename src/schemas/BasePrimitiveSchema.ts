@@ -1,46 +1,35 @@
 import type { Check, ErrorObject, ReturnType, ValidateReturnType } from '../types.js';
-import { NumberSchema } from './NumberSchema.js';
-import { StringSchema } from './StringSchema.js';
 
-class BasePrimitiveSchema {
-	validateType(type: string, data: any): ReturnType {
+abstract class BasePrimitiveSchema {
+	protected abstract type: string;
+	protected abstract checks: Array<Check>;
+
+	protected validateType(data: any): ReturnType {
 		return (
-			typeof data === type || {
+			typeof data === this.type || {
 				rule: 'type',
-				message: `typeof (${data}) is not ${type}`,
+				message: `(${typeof data})(${data}) is not a ${this.type}`,
 				code: 'INVALID_TYPE',
 				meta: {
-					expected: type,
+					expected: this.type,
 					received: typeof data,
 				},
 			}
 		);
 	}
 
-	validate(checks: Check[], data: any): ValidateReturnType {
+	validate(data: any): ValidateReturnType {
 		const errors: ErrorObject[] = [];
 
-		let answer: ReturnType = {
-			rule: 'type',
-			message: 'invalid type',
-			code: 'INVALID TYPE',
-			meta: {},
-		};
+		const typeCheck = this.validateType(data);
 
-		if (this instanceof NumberSchema || this instanceof StringSchema) {
-			answer = this.validateType(data);
+		if (typeCheck !== true) {
+			errors.push(typeCheck);
+
+			return { isValid: false, errors };
 		}
 
-		if (answer !== true) {
-			errors.push(answer);
-
-			return {
-				isValid: false,
-				errors,
-			};
-		}
-
-		for (const check of checks) {
+		for (const check of this.checks) {
 			const answer = check(data);
 
 			if (answer !== true) {
@@ -48,17 +37,7 @@ class BasePrimitiveSchema {
 			}
 		}
 
-		if (errors.length === 0) {
-			return {
-				isValid: true,
-				data,
-			};
-		}
-
-		return {
-			isValid: false,
-			errors,
-		};
+		return errors.length === 0 ? { isValid: true, data } : { isValid: false, errors };
 	}
 }
 
