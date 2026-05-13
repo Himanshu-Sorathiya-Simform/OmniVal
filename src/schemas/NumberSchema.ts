@@ -59,24 +59,6 @@ class NumberSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	equals(val: number, params?: Params) {
-		const { customMessage, customCode } = this.getCustomProperties(params);
-
-		this.checks.push(
-			(data: any): CheckFnReturnType =>
-				data === val || {
-					rule: 'equals',
-					message: customMessage ?? `${data} is not equal to ${val}`,
-					code: customCode ?? 'NOT_EQUAL',
-					meta: {
-						expected: `Equals to ${val}`,
-						received: data,
-					},
-				},
-		);
-
-		return this;
-	}
 	positive(params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 

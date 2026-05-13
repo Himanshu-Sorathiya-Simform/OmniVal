@@ -14,7 +14,7 @@ abstract class BasePrimitiveSchema {
 		return (
 			typeof data === this.type || {
 				rule: 'type',
-				message: `(${typeof data})(${data}) is not a ${this.type}`,
+				message: `(${typeof data})(${Object.is(data, -0) ? '-0' : data}) is not a ${this.type}`,
 				code: 'INVALID_TYPE',
 				meta: {
 					expected: this.type,
@@ -22,6 +22,27 @@ abstract class BasePrimitiveSchema {
 				},
 			}
 		);
+	}
+
+	equals(val: any, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				Object.is(val, data) || {
+					rule: 'equals',
+					message:
+						customMessage ??
+						`${Object.is(data, -0) ? '-0' : data} is not equal to ${val}`,
+					code: customCode ?? 'NOT_EQUAL',
+					meta: {
+						expected: `Equals to ${val}`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
 	}
 
 	validate(data: any): ValidateFnReturnType {
