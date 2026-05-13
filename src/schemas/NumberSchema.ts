@@ -1,17 +1,17 @@
-import type { Check, ReturnType, ValidateReturnType } from '../types.js';
+import type { CheckFn, CheckFnReturnType, ValidateFnReturnType } from '../types.js';
 import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class NumberSchema extends BasePrimitiveSchema {
 	protected type: string = 'number';
-	protected checks: Array<Check> = [];
+	protected checks: Array<CheckFn> = [];
 
-	override validateType(data: any): ReturnType {
+	override validateType(data: any): CheckFnReturnType {
 		return super.validateType(data);
 	}
 
 	min(val: number) {
 		this.checks.push(
-			(data: any): ReturnType =>
+			(data: any): CheckFnReturnType =>
 				data >= val || {
 					rule: 'min',
 					message: `${data} is smaller than ${val}`,
@@ -27,7 +27,7 @@ class NumberSchema extends BasePrimitiveSchema {
 	}
 	max(val: number) {
 		this.checks.push(
-			(data: any): ReturnType =>
+			(data: any): CheckFnReturnType =>
 				data <= val || {
 					rule: 'max',
 					message: `${data} is bigger than ${val}`,
@@ -43,7 +43,7 @@ class NumberSchema extends BasePrimitiveSchema {
 	}
 	positive() {
 		this.checks.push(
-			(data: any): ReturnType =>
+			(data: any): CheckFnReturnType =>
 				data > 0 || {
 					rule: 'positive',
 					message: `${data} is not positive`,
@@ -59,7 +59,7 @@ class NumberSchema extends BasePrimitiveSchema {
 	}
 	negative() {
 		this.checks.push(
-			(data: any): ReturnType =>
+			(data: any): CheckFnReturnType =>
 				data < 0 || {
 					rule: 'negative',
 					message: `${data} is not negative`,
@@ -74,7 +74,7 @@ class NumberSchema extends BasePrimitiveSchema {
 		return this;
 	}
 
-	override validate(data: any): ValidateReturnType {
+	override validate(data: any): ValidateFnReturnType {
 		return super.validate(data);
 	}
 }

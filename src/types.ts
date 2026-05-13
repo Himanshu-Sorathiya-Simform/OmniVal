@@ -5,7 +5,7 @@ interface ErrorObject {
 	meta: object;
 }
 
-type ValidateReturnType =
+type ValidateFnReturnType =
 	| {
 			isValid: boolean;
 			data: any;
@@ -17,8 +17,8 @@ type ValidateReturnType =
 			data?: never;
 	  };
 
-type ReturnType = true | ErrorObject;
+type CheckFnReturnType = true | ErrorObject;
 
-type Check = (...args: any[]) => ReturnType;
+type CheckFn = (...args: any[]) => CheckFnReturnType;
 
-export type { Check, ErrorObject, ReturnType, ValidateReturnType };
+export type { CheckFn, CheckFnReturnType, ErrorObject, ValidateFnReturnType };

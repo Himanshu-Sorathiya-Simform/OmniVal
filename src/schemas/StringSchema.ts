@@ -1,17 +1,17 @@
-import type { Check, ReturnType, ValidateReturnType } from '../types.js';
+import type { CheckFn, CheckFnReturnType, ValidateFnReturnType } from '../types.js';
 import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class StringSchema extends BasePrimitiveSchema {
 	protected type: string = 'string';
-	protected checks: Array<Check> = [];
+	protected checks: Array<CheckFn> = [];
 
-	protected override validateType(data: any): ReturnType {
+	protected override validateType(data: any): CheckFnReturnType {
 		return super.validateType(data);
 	}
 
 	min(val: number) {
 		this.checks.push(
-			(data: any): ReturnType =>
+			(data: any): CheckFnReturnType =>
 				data.length >= val || {
 					rule: 'min',
 					message: `length of ${data} is smaller than required ${val} length`,
@@ -27,7 +27,7 @@ class StringSchema extends BasePrimitiveSchema {
 	}
 	max(val: number) {
 		this.checks.push(
-			(data: any): ReturnType =>
+			(data: any): CheckFnReturnType =>
 				data.length <= val || {
 					rule: 'max',
 					message: `length of ${data} is bigger than required ${val} length`,
@@ -42,7 +42,7 @@ class StringSchema extends BasePrimitiveSchema {
 		return this;
 	}
 
-	override validate(data: any): ValidateReturnType {
+	override validate(data: any): ValidateFnReturnType {
 		return super.validate(data);
 	}
 }

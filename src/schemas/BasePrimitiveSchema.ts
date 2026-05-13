@@ -1,10 +1,15 @@
-import type { Check, ErrorObject, ReturnType, ValidateReturnType } from '../types.js';
+import type {
+	CheckFn,
+	CheckFnReturnType,
+	ErrorObject,
+	ValidateFnReturnType,
+} from '../types.js';
 
 abstract class BasePrimitiveSchema {
 	protected abstract type: string;
-	protected abstract checks: Array<Check>;
+	protected abstract checks: Array<CheckFn>;
 
-	protected validateType(data: any): ReturnType {
+	protected validateType(data: any): CheckFnReturnType {
 		return (
 			typeof data === this.type || {
 				rule: 'type',
@@ -18,7 +23,7 @@ abstract class BasePrimitiveSchema {
 		);
 	}
 
-	validate(data: any): ValidateReturnType {
+	validate(data: any): ValidateFnReturnType {
 		const errors: ErrorObject[] = [];
 
 		const typeCheck = this.validateType(data);
