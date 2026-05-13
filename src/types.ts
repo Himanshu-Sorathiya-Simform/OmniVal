@@ -21,4 +21,6 @@ type CheckFnReturnType = true | ErrorObject;
 
 type CheckFn = (...args: any[]) => CheckFnReturnType;
 
-export type { CheckFn, CheckFnReturnType, ErrorObject, ValidateFnReturnType };
+type Params = string | Partial<Pick<ErrorObject, 'code' | 'message'>>;
+
+export type { CheckFn, CheckFnReturnType, ErrorObject, Params, ValidateFnReturnType };

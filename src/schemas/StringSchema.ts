@@ -1,4 +1,9 @@
-import type { CheckFn, CheckFnReturnType, ValidateFnReturnType } from '../types.js';
+import type {
+	CheckFn,
+	CheckFnReturnType,
+	Params,
+	ValidateFnReturnType,
+} from '../types.js';
 import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class StringSchema extends BasePrimitiveSchema {
@@ -9,13 +14,17 @@ class StringSchema extends BasePrimitiveSchema {
 		return super.validateType(data);
 	}
 
-	min(val: number) {
+	min(val: number, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.length >= val || {
 					rule: 'min',
-					message: `length of ${data} is smaller than required ${val} length`,
-					code: 'TOO_SHORT',
+					message:
+						customMessage ??
+						`length of "${data}"(${data.length}) is smaller than required ${val} length`,
+					code: customCode ?? 'TOO_SHORT',
 					meta: {
 						expected: `min length of ${val}`,
 						received: data.length,
@@ -25,13 +34,17 @@ class StringSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	max(val: number) {
+	max(val: number, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.length <= val || {
 					rule: 'max',
-					message: `length of ${data} is bigger than required ${val} length`,
-					code: 'TOO_LONG',
+					message:
+						customMessage ??
+						`length of "${data}"(${data.length}) is bigger than required ${val} length`,
+					code: customCode ?? 'TOO_LONG',
 					meta: {
 						expected: `max length of ${val}`,
 						received: data.length,

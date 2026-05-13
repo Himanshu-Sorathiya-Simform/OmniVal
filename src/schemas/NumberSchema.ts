@@ -1,4 +1,9 @@
-import type { CheckFn, CheckFnReturnType, ValidateFnReturnType } from '../types.js';
+import type {
+	CheckFn,
+	CheckFnReturnType,
+	Params,
+	ValidateFnReturnType,
+} from '../types.js';
 import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class NumberSchema extends BasePrimitiveSchema {
@@ -9,13 +14,15 @@ class NumberSchema extends BasePrimitiveSchema {
 		return super.validateType(data);
 	}
 
-	min(val: number) {
+	min(val: number, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data >= val || {
 					rule: 'min',
-					message: `${data} is smaller than ${val}`,
-					code: 'TOO_SHORT',
+					message: customMessage ?? `${data} is smaller than ${val}`,
+					code: customCode ?? 'TOO_SHORT',
 					meta: {
 						expected: `>= ${val}`,
 						received: data,
@@ -25,13 +32,15 @@ class NumberSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	max(val: number) {
+	max(val: number, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data <= val || {
 					rule: 'max',
-					message: `${data} is bigger than ${val}`,
-					code: 'TOO_LONG',
+					message: customMessage ?? `${data} is bigger than ${val}`,
+					code: customCode ?? 'TOO_LONG',
 					meta: {
 						expected: `<= ${val}`,
 						received: data,
@@ -41,13 +50,15 @@ class NumberSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	positive() {
+	positive(params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data > 0 || {
 					rule: 'positive',
-					message: `${data} is not positive`,
-					code: 'NOT_POSITIVE',
+					message: customMessage ?? `${data} is not a positive number`,
+					code: customCode ?? 'NOT_POSITIVE',
 					meta: {
 						expected: `> 0`,
 						received: data,
@@ -57,13 +68,15 @@ class NumberSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	negative() {
+	negative(params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data < 0 || {
 					rule: 'negative',
-					message: `${data} is not negative`,
-					code: 'NOT_NEGATIVE',
+					message: customMessage ?? `${data} is not a negative number`,
+					code: customCode ?? 'NOT_NEGATIVE',
 					meta: {
 						expected: `< 0`,
 						received: data,

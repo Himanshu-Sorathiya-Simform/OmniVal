@@ -2,6 +2,7 @@ import type {
 	CheckFn,
 	CheckFnReturnType,
 	ErrorObject,
+	Params,
 	ValidateFnReturnType,
 } from '../types.js';
 
@@ -43,6 +44,14 @@ abstract class BasePrimitiveSchema {
 		}
 
 		return errors.length === 0 ? { isValid: true, data } : { isValid: false, errors };
+	}
+
+	protected getCustomProperties(params?: Params) {
+		const customMessage =
+			params && (typeof params === 'string' ? params : params.message);
+		const customCode = params && typeof params !== 'string' ? params.code : undefined;
+
+		return { customMessage, customCode };
 	}
 }
 
