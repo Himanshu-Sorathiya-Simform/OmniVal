@@ -82,6 +82,8 @@ Starts a number validation chain.
 - `.positive()` - Checks if value is > 0.
 - `.negative()` - Checks if value is < 0.
 - `.equals(value)` - Checks for exact number match.
+- `.integer()` - Checks if the value is a whole number without a decimal component.
+- `.multipleOf(step)` - Checks if the value is perfectly divisible by the provided step.
 
 ### `v.boolean()`
 
