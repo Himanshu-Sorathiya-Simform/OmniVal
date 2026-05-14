@@ -1,2 +1,121 @@
-# OmniVal
-OmniVal, Your all in one validator package for doing any kind of validation with great DX by providing advance custom options.
+# @himanshu-sorathiya/omnival
+
+OmniVal is an all-in-one validator package designed for JavaScript and TypeScript with a
+focus on developer experience. It provides a chainable, class-based API for validating
+strings, numbers, and booleans with advanced customization options for error handling.
+
+## Installation
+
+```bash
+npm install @himanshu-sorathiya/omnival
+```
+
+## Core Concepts
+
+- **Type Safety:** Built with TypeScript to provide full autocomplete for all validation
+  methods.
+- **Fail-Fast Type Checking:** If the initial type check (string, number, boolean) fails,
+  validation stops immediately to prevent side effects.
+- **Aggregated Rule Validation:** Once the type is confirmed, all chained rules are
+  executed. Even if one rule fails, the library continues checking the rest to provide a
+  complete report of all violations.
+- **Order Independent:** Methods can be chained in any order.
+
+## Basic Usage
+
+```typescript
+import v from '@himanshu-sorathiya/omnival';
+
+// Successful validation
+const result = v.number().positive().max(15).validate(10);
+// Returns: { isValid: true, data: 10 }
+
+// Failed validation with multiple errors
+const failure = v.number().max(15).positive().min(5).validate(-10);
+
+/*
+Returns:
+{
+  isValid: false,
+  errors: [
+    {
+      rule: 'positive',
+      message: '-10 is not a positive number',
+      code: 'NOT_POSITIVE',
+      meta: { ... }
+    },
+    {
+      rule: 'min',
+      message: '-10 is smaller than 5',
+      code: 'TOO_SHORT',
+      meta: { ... }
+    }
+  ]
+}
+*/
+```
+
+## API Reference
+
+### `v.string()`
+
+Starts a string validation chain.
+
+- `.min(length)` - Checks if string length is >= length.
+- `.max(length)` - Checks if string length is <= length.
+- `.equals(value)` - Checks for exact string match.
+
+### `v.number()`
+
+Starts a number validation chain.
+
+- `.min(value)` - Checks if value is >= min.
+- `.max(value)` - Checks if value is <= max.
+- `.positive()` - Checks if value is > 0.
+- `.negative()` - Checks if value is < 0.
+- `.equals(value)` - Checks for exact number match.
+
+### `v.boolean()`
+
+Starts a boolean validation chain.
+
+- `.equals(value)` - Checks for exact boolean match.
+
+## Customizing Errors
+
+Every validation method accepts an optional second argument. This allows you to override
+the default error messages and codes to fit your application's error-handling strategy.
+
+### Using a String
+
+Pass a string to replace only the default message.
+
+```typescript
+v.number().positive('Value must be greater than zero');
+```
+
+### Using an Object
+
+Pass an object to replace the message, the code, or both.
+
+```typescript
+v.number().min(5, {
+	code: 'CUSTOM_MIN_ERROR',
+	message: 'The value provided is too low',
+});
+```
+
+## Error Object Structure
+
+When validation fails, the errors array contains objects with the following structure:
+
+| Property | Type   | Description                                           |
+| -------- | ------ | ----------------------------------------------------- |
+| rule     | string | The name of the rule that failed.                     |
+| message  | string | The error message (default or custom).                |
+| code     | string | The error code for programmatic handling.             |
+| meta     | object | Additional context (e.g., expected vs actual values). |
+
+## License
+
+MIT
