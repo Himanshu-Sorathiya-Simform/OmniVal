@@ -61,19 +61,29 @@ Returns:
 
 Starts a string validation chain.
 
-- `.min(length)` - Checks if string length is >= length.
-- `.max(length)` - Checks if string length is <= length.
+- `.minLength(length)` - Checks if string length is >= length.
+- `.maxLength(length)` - Checks if string length is <= length.
 - `.equals(value)` - Checks for exact string match.
+- `.length(value)` - Checks if the string length is exactly equal to value.
+- `.startsWith(prefix)` - Checks if the string begins with the specified prefix.
+- `.endsWith(suffix)` - Checks if the string ends with the specified suffix.
+- `.includes(substring)` - Checks if the string contains the specified substring.
+- `.uppercase()` - Checks if all alphabetic characters in the string are uppercase.
+- `.lowercase()` - Checks if all alphabetic characters in the string are lowercase.
+- `.alphabets()` - Checks if all characters in the string are alphabets.
+- `.numbers()` - Checks if all characters in the string are numbers.
 
 ### `v.number()`
 
 Starts a number validation chain.
 
-- `.min(value)` - Checks if value is >= min.
-- `.max(value)` - Checks if value is <= max.
+- `.minValue(value)` - Checks if value is >= min.
+- `.maxValue(value)` - Checks if value is <= max.
 - `.positive()` - Checks if value is > 0.
 - `.negative()` - Checks if value is < 0.
 - `.equals(value)` - Checks for exact number match.
+- `.integer()` - Checks if the value is a whole number without a decimal component.
+- `.multipleOf(step)` - Checks if the value is perfectly divisible by the provided step.
 
 ### `v.boolean()`
 
