@@ -1,6 +1,6 @@
 {
 	"name": "@himanshu-sorathiya/omnival",
-	"version": "1.1.2",
+	"version": "1.2.0",
 	"description": "OmniVal, Your all in one validator package for doing any kind of validation with great DX by providing advance custom options.",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
@@ -29,7 +29,7 @@
 		"validation"
 	],
 	"author": "Himanshu Sorathiya",
-	"license": "ISC",
+	"license": "MIT",
 	"type": "module",
 	"bugs": {
 		"url": "https://github.com/Himanshu-Sorathiya-Simform/OmniVal/issues"
