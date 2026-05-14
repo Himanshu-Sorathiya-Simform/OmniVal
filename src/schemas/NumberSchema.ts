@@ -23,7 +23,7 @@ class NumberSchema extends BasePrimitiveSchema {
 		return super.validateType(data);
 	}
 
-	min(val: number, params?: Params) {
+	minValue(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
 		this.checks.push(
@@ -41,7 +41,7 @@ class NumberSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	max(val: number, params?: Params) {
+	maxValue(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
 		this.checks.push(

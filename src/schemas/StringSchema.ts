@@ -14,7 +14,7 @@ class StringSchema extends BasePrimitiveSchema {
 		return super.validateType(data);
 	}
 
-	min(val: number, params?: Params) {
+	minLength(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
 		this.checks.push(
@@ -34,7 +34,7 @@ class StringSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	max(val: number, params?: Params) {
+	maxLength(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
 		this.checks.push(
@@ -157,6 +157,43 @@ class StringSchema extends BasePrimitiveSchema {
 					code: customCode ?? 'NOT_ALL_LOWERCASE',
 					meta: {
 						expected: `all lowercase`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	alphabets(params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				/^\p{L}+$/u.test(data) || {
+					rule: 'alphabets',
+					message:
+						customMessage ?? `Not all characters of ${data} are alphabets`,
+					code: customCode ?? 'NOT_ALL_ALPHABETS',
+					meta: {
+						expected: `all alphabets`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	numbers(params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				/^-?\d+(\.\d+)?$/.test(data) || {
+					rule: 'numbers',
+					message: customMessage ?? `Not all characters of ${data} are numbers`,
+					code: customCode ?? 'NOT_ALL_NUMBERS',
+					meta: {
+						expected: `all numbers`,
 						received: data,
 					},
 				},
