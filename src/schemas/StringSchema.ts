@@ -54,6 +54,78 @@ class StringSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
+	length(val: number, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				data.length === val || {
+					rule: 'length',
+					message: customMessage ?? `length of ${data} is not equal to ${val}`,
+					code: customCode ?? 'NOT_EQUAL_LENGTH',
+					meta: {
+						expected: `same length ${val}`,
+						received: data.length,
+					},
+				},
+		);
+
+		return this;
+	}
+	startsWith(val: string, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				data.startsWith(val) || {
+					rule: 'startsWith',
+					message: customMessage ?? `${data} is not starting with ${val}`,
+					code: customCode ?? 'NOT_STARTS_WITH',
+					meta: {
+						expected: `start with ${val}`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	endsWith(val: string, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				data.endsWith(val) || {
+					rule: 'endsWith',
+					message: customMessage ?? `${data} is not ending with ${val}`,
+					code: customCode ?? 'NOT_ENDS_WITH',
+					meta: {
+						expected: `end with ${val}`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	includes(val: string, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				data.includes(val) || {
+					rule: 'includes',
+					message: customMessage ?? `${data} is not including ${val}`,
+					code: customCode ?? 'NOT_INCLUDE',
+					meta: {
+						expected: `${data} includes ${val}`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
 
 	override validate(data: any): ValidateFnReturnType {
 		return super.validate(data);
