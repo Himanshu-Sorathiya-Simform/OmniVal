@@ -11,7 +11,7 @@ class NumberSchema extends BasePrimitiveSchema {
 	protected checks: Array<CheckFn> = [];
 
 	protected override validateType(data: any): CheckFnReturnType {
-		if (Number.isNaN(data)) {
+		if (Number.isNaN(data) || !Number.isFinite(data)) {
 			return {
 				rule: 'type',
 				code: 'INVALID_TYPE',
@@ -88,6 +88,42 @@ class NumberSchema extends BasePrimitiveSchema {
 					code: customCode ?? 'NOT_NEGATIVE',
 					meta: {
 						expected: `< 0`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	integer(params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				Number.isInteger(data) || {
+					rule: 'multipleOf',
+					message: customMessage ?? `${data} is not an integer`,
+					code: customCode ?? 'NOT_MULTIPLE_OF',
+					meta: {
+						expected: `an integer`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	multipleOf(step: number, params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				data % step === 0 || {
+					rule: 'multipleOf',
+					message: customMessage ?? `${data} is not multiple of ${step}`,
+					code: customCode ?? 'NOT_MULTIPLE_OF',
+					meta: {
+						expected: `multiple of ${step}`,
 						received: data,
 					},
 				},
