@@ -64,6 +64,12 @@ Starts a string validation chain.
 - `.min(length)` - Checks if string length is >= length.
 - `.max(length)` - Checks if string length is <= length.
 - `.equals(value)` - Checks for exact string match.
+- `.length(value)` - Checks if the string length is exactly equal to value.
+- `.startsWith(prefix)` - Checks if the string begins with the specified prefix.
+- `.endsWith(suffix)` - Checks if the string ends with the specified suffix.
+- `.includes(substring)` - Checks if the string contains the specified substring.
+- `.uppercase()` - Checks if all alphabetic characters in the string are uppercase.
+- `.lowercase()` - Checks if all alphabetic characters in the string are lowercase.
 
 ### `v.number()`
 

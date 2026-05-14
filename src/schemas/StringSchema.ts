@@ -72,17 +72,17 @@ class StringSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	startsWith(val: string, params?: Params) {
+	startsWith(prefix: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
-				data.startsWith(val) || {
+				data.startsWith(prefix) || {
 					rule: 'startsWith',
-					message: customMessage ?? `${data} is not starting with ${val}`,
+					message: customMessage ?? `${data} is not starting with ${prefix}`,
 					code: customCode ?? 'NOT_STARTS_WITH',
 					meta: {
-						expected: `start with ${val}`,
+						expected: `start with ${prefix}`,
 						received: data,
 					},
 				},
@@ -90,17 +90,17 @@ class StringSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	endsWith(val: string, params?: Params) {
+	endsWith(suffix: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
-				data.endsWith(val) || {
+				data.endsWith(suffix) || {
 					rule: 'endsWith',
-					message: customMessage ?? `${data} is not ending with ${val}`,
+					message: customMessage ?? `${data} is not ending with ${suffix}`,
 					code: customCode ?? 'NOT_ENDS_WITH',
 					meta: {
-						expected: `end with ${val}`,
+						expected: `end with ${suffix}`,
 						received: data,
 					},
 				},
@@ -108,17 +108,55 @@ class StringSchema extends BasePrimitiveSchema {
 
 		return this;
 	}
-	includes(val: string, params?: Params) {
+	includes(substring: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
-				data.includes(val) || {
+				data.includes(substring) || {
 					rule: 'includes',
-					message: customMessage ?? `${data} is not including ${val}`,
+					message: customMessage ?? `${data} is not including ${substring}`,
 					code: customCode ?? 'NOT_INCLUDE',
 					meta: {
-						expected: `${data} includes ${val}`,
+						expected: `${data} includes ${substring}`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	uppercase(params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				data.split('').every((char: string) => char === char.toUpperCase()) || {
+					rule: 'includes',
+					message:
+						customMessage ?? `Not all characters of ${data} are uppercase`,
+					code: customCode ?? 'NOT_ALL_UPPERCASE',
+					meta: {
+						expected: `all uppercase`,
+						received: data,
+					},
+				},
+		);
+
+		return this;
+	}
+	lowercase(params?: Params) {
+		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		this.checks.push(
+			(data: any): CheckFnReturnType =>
+				data.split('').every((char: string) => char === char.toLowerCase()) || {
+					rule: 'includes',
+					message:
+						customMessage ?? `Not all characters of ${data} are lowercase`,
+					code: customCode ?? 'NOT_ALL_LOWERCASE',
+					meta: {
+						expected: `all lowercase`,
 						received: data,
 					},
 				},
