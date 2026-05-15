@@ -1,6 +1,6 @@
 {
 	"name": "@himanshu-sorathiya/omnival",
-	"version": "1.3.0",
+	"version": "1.3.1",
 	"description": "OmniVal, Your all in one validator package for doing any kind of validation with great DX by providing advance custom options.",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",

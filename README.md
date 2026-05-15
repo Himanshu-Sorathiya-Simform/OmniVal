@@ -26,6 +26,8 @@ npm install @himanshu-sorathiya/omnival
 ```typescript
 import v from '@himanshu-sorathiya/omnival';
 
+// Primitive validations
+
 // Successful validation
 const result = v.number().positive().max(15).validate(10);
 // Returns: { isValid: true, data: 10 }
@@ -49,6 +51,55 @@ Returns:
       message: '-10 is smaller than 5',
       code: 'TOO_SHORT',
       meta: { ... }
+    }
+  ]
+}
+*/
+
+// Object validations
+
+// Successful validation
+const result = v
+	.object({
+		role: v.string().lowercase(),
+		stars: v.number().positive(),
+	})
+	.validate({ role: 'admin', stars: 5 });
+// Returns: { isValid: true, data: { role: 'admin', stars: 5 } }
+
+// Failed validation with multiple errors
+const failure = v
+	.object({
+		role: v.string().lowercase(),
+		stars: v.number().positive(),
+	})
+	.validate({ role: 'ADMIN', stars: -3 });
+/*
+Returns:
+{
+  "isValid": false,
+  "errors": [
+    {
+      "path": "role",
+      "errors": [
+        {
+          "rule": "lowercase",
+          "code": "NOT_LOWERCASE",
+          "message": "ADMIN contains uppercase characters",
+          "meta": { "expected": "lowercase string", "received": "ADMIN" }
+        }
+      ]
+    },
+    {
+      "path": "stars",
+      "errors": [
+        {
+          "rule": "positive",
+          "code": "NOT_POSITIVE",
+          "message": "-3 is not a positive number",
+          "meta": { "expected": "> 0", "received": -3 }
+        }
+      ]
     }
   ]
 }
@@ -90,6 +141,10 @@ Starts a number validation chain.
 Starts a boolean validation chain.
 
 - `.equals(value)` - Checks for exact boolean match.
+
+### `v.object(shape)`
+
+Starts an object structural definition.
 
 ## Customizing Errors
 
