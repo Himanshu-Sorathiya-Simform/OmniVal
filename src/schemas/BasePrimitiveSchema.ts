@@ -1,9 +1,9 @@
 import type {
 	CheckFn,
 	CheckFnReturnType,
-	ErrorObject,
 	Params,
-	ValidateFnReturnType,
+	PrimitiveErrorObject,
+	PrimitiveValidateFnReturnType,
 } from '../types.js';
 
 abstract class BasePrimitiveSchema {
@@ -14,7 +14,7 @@ abstract class BasePrimitiveSchema {
 		return (
 			typeof data === this.type || {
 				rule: 'type',
-				message: `(${typeof data})(${Object.is(data, -0) ? '-0' : data}) is not a ${this.type}`,
+				message: `(${typeof data})(${data}) is not a ${this.type}`,
 				code: 'INVALID_TYPE',
 				meta: {
 					expected: this.type,
@@ -45,8 +45,8 @@ abstract class BasePrimitiveSchema {
 		return this;
 	}
 
-	validate(data: any): ValidateFnReturnType {
-		const errors: ErrorObject[] = [];
+	validate(data: any): PrimitiveValidateFnReturnType {
+		const errors: PrimitiveErrorObject[] = [];
 
 		const typeCheck = this.validateType(data);
 

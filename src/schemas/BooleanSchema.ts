@@ -1,4 +1,8 @@
-import type { CheckFn, CheckFnReturnType, ValidateFnReturnType } from '../types.js';
+import type {
+	CheckFn,
+	CheckFnReturnType,
+	PrimitiveValidateFnReturnType,
+} from '../types.js';
 import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class BooleanSchema extends BasePrimitiveSchema {
@@ -18,7 +22,7 @@ class BooleanSchema extends BasePrimitiveSchema {
 		return super.validateType(data);
 	}
 
-	override validate(data: any): ValidateFnReturnType {
+	override validate(data: any): PrimitiveValidateFnReturnType {
 		return super.validate(data);
 	}
 }

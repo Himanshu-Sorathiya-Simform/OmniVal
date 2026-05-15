@@ -2,7 +2,7 @@ import type {
 	CheckFn,
 	CheckFnReturnType,
 	Params,
-	ValidateFnReturnType,
+	PrimitiveValidateFnReturnType,
 } from '../types.js';
 import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
@@ -15,7 +15,7 @@ class NumberSchema extends BasePrimitiveSchema {
 			return {
 				rule: 'type',
 				code: 'INVALID_TYPE',
-				message: `(${data}) is not a ${this.type}`,
+				message: `(${typeof data})(${data}) is not a valid ${this.type} type`,
 				meta: { expected: this.type, received: typeof data },
 			};
 		}
@@ -132,7 +132,7 @@ class NumberSchema extends BasePrimitiveSchema {
 		return this;
 	}
 
-	override validate(data: any): ValidateFnReturnType {
+	override validate(data: any): PrimitiveValidateFnReturnType {
 		return super.validate(data);
 	}
 }
