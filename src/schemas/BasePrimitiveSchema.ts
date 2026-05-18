@@ -62,10 +62,10 @@ abstract class BasePrimitiveSchema {
 		}
 
 		for (const check of this.checks) {
-			const answer = check(data);
+			const isValid = check(data);
 
-			if (answer !== true) {
-				errors.push(answer);
+			if (isValid !== true) {
+				errors.push(isValid);
 			}
 		}
 

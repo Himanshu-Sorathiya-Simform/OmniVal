@@ -16,8 +16,8 @@ class NumberSchema extends BasePrimitiveSchema {
 			return {
 				rule: 'type',
 				code: 'INVALID_TYPE',
-				message: `(${typeof data})(${data}) is not a valid ${this.type} type`,
-				meta: { expected: this.type, received: typeof data },
+				message: `(${typeof data})(${data}) is not a valid ${this.type}`,
+				meta: { expected: 'valid number', received: data },
 			};
 		}
 

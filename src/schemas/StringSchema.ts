@@ -107,7 +107,7 @@ class StringSchema extends BasePrimitiveSchema {
 				data.startsWith(prefix) || {
 					rule: 'startsWith',
 					message: customMessage ?? `"${data}" is not starting with ${prefix}`,
-					code: customCode ?? 'NOT_STARTS_WITH',
+					code: customCode ?? 'NOT_START_WITH',
 					meta: {
 						expected: `start with ${prefix}`,
 						received: data,
@@ -131,7 +131,7 @@ class StringSchema extends BasePrimitiveSchema {
 				data.endsWith(suffix) || {
 					rule: 'endsWith',
 					message: customMessage ?? `"${data}" is not ending with ${suffix}`,
-					code: customCode ?? 'NOT_ENDS_WITH',
+					code: customCode ?? 'NOT_END_WITH',
 					meta: {
 						expected: `end with ${suffix}`,
 						received: data,
@@ -171,7 +171,7 @@ class StringSchema extends BasePrimitiveSchema {
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.split('').every((char: string) => char === char.toUpperCase()) || {
-					rule: 'includes',
+					rule: 'uppercase',
 					message:
 						customMessage ?? `Not all characters of "${data}" are uppercase`,
 					code: customCode ?? 'NOT_ALL_UPPERCASE',
@@ -190,7 +190,7 @@ class StringSchema extends BasePrimitiveSchema {
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.split('').every((char: string) => char === char.toLowerCase()) || {
-					rule: 'includes',
+					rule: 'lowercase',
 					message:
 						customMessage ?? `Not all characters of "${data}" are lowercase`,
 					code: customCode ?? 'NOT_ALL_LOWERCASE',
