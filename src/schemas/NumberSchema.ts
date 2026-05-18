@@ -1,3 +1,4 @@
+import { validateParameterType } from '../helpers/helpers.js';
 import type {
 	CheckFn,
 	CheckFnReturnType,
@@ -26,10 +27,16 @@ class NumberSchema extends BasePrimitiveSchema {
 	minValue(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'minValue',
+			passedValue: val,
+			typeOfParameterRequired: 'number',
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data >= val || {
-					rule: 'min',
+					rule: 'minValue',
 					message: customMessage ?? `${data} is smaller than ${val}`,
 					code: customCode ?? 'TOO_SHORT',
 					meta: {
@@ -44,10 +51,16 @@ class NumberSchema extends BasePrimitiveSchema {
 	maxValue(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'maxValue',
+			passedValue: val,
+			typeOfParameterRequired: 'number',
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data <= val || {
-					rule: 'max',
+					rule: 'maxValue',
 					message: customMessage ?? `${data} is bigger than ${val}`,
 					code: customCode ?? 'TOO_LONG',
 					meta: {
@@ -101,9 +114,9 @@ class NumberSchema extends BasePrimitiveSchema {
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				Number.isInteger(data) || {
-					rule: 'multipleOf',
+					rule: 'integer',
 					message: customMessage ?? `${data} is not an integer`,
-					code: customCode ?? 'NOT_MULTIPLE_OF',
+					code: customCode ?? 'NOT_INTEGER',
 					meta: {
 						expected: `an integer`,
 						received: data,
@@ -115,6 +128,12 @@ class NumberSchema extends BasePrimitiveSchema {
 	}
 	multipleOf(step: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
+
+		validateParameterType({
+			rule: 'multipleOf',
+			passedValue: step,
+			typeOfParameterRequired: 'number',
+		});
 
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
