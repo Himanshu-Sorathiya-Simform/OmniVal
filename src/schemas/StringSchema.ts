@@ -1,3 +1,4 @@
+import { validateParameterType } from '../helpers/helpers.js';
 import type {
 	CheckFn,
 	CheckFnReturnType,
@@ -17,10 +18,16 @@ class StringSchema extends BasePrimitiveSchema {
 	minLength(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'minLength',
+			passedValue: val,
+			typeOfParameterRequired: 'number',
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.length >= val || {
-					rule: 'min',
+					rule: 'minLength',
 					message:
 						customMessage ??
 						`length of "${data}"(${data.length}) is smaller than required ${val} length`,
@@ -37,10 +44,16 @@ class StringSchema extends BasePrimitiveSchema {
 	maxLength(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'maxLength',
+			passedValue: val,
+			typeOfParameterRequired: 'number',
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.length <= val || {
-					rule: 'max',
+					rule: 'maxLength',
 					message:
 						customMessage ??
 						`length of "${data}"(${data.length}) is bigger than required ${val} length`,
@@ -57,11 +70,19 @@ class StringSchema extends BasePrimitiveSchema {
 	length(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'length',
+			passedValue: val,
+			typeOfParameterRequired: 'number',
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.length === val || {
 					rule: 'length',
-					message: customMessage ?? `length of ${data} is not equal to ${val}`,
+					message:
+						customMessage ??
+						`length of "${data}"(${data.length}) is not equal to ${val}`,
 					code: customCode ?? 'NOT_EQUAL_LENGTH',
 					meta: {
 						expected: `same length ${val}`,
@@ -75,11 +96,17 @@ class StringSchema extends BasePrimitiveSchema {
 	startsWith(prefix: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'startsWith',
+			passedValue: prefix,
+			typeOfParameterRequired: 'string',
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.startsWith(prefix) || {
 					rule: 'startsWith',
-					message: customMessage ?? `${data} is not starting with ${prefix}`,
+					message: customMessage ?? `"${data}" is not starting with ${prefix}`,
 					code: customCode ?? 'NOT_STARTS_WITH',
 					meta: {
 						expected: `start with ${prefix}`,
@@ -93,11 +120,17 @@ class StringSchema extends BasePrimitiveSchema {
 	endsWith(suffix: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'endsWith',
+			passedValue: suffix,
+			typeOfParameterRequired: 'string',
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.endsWith(suffix) || {
 					rule: 'endsWith',
-					message: customMessage ?? `${data} is not ending with ${suffix}`,
+					message: customMessage ?? `"${data}" is not ending with ${suffix}`,
 					code: customCode ?? 'NOT_ENDS_WITH',
 					meta: {
 						expected: `end with ${suffix}`,
@@ -111,11 +144,17 @@ class StringSchema extends BasePrimitiveSchema {
 	includes(substring: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'includes',
+			passedValue: substring,
+			typeOfParameterRequired: 'string',
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				data.includes(substring) || {
 					rule: 'includes',
-					message: customMessage ?? `${data} is not including ${substring}`,
+					message: customMessage ?? `"${data}" is not including ${substring}`,
 					code: customCode ?? 'NOT_INCLUDE',
 					meta: {
 						expected: `${data} includes ${substring}`,
@@ -134,7 +173,7 @@ class StringSchema extends BasePrimitiveSchema {
 				data.split('').every((char: string) => char === char.toUpperCase()) || {
 					rule: 'includes',
 					message:
-						customMessage ?? `Not all characters of ${data} are uppercase`,
+						customMessage ?? `Not all characters of "${data}" are uppercase`,
 					code: customCode ?? 'NOT_ALL_UPPERCASE',
 					meta: {
 						expected: `all uppercase`,
@@ -153,7 +192,7 @@ class StringSchema extends BasePrimitiveSchema {
 				data.split('').every((char: string) => char === char.toLowerCase()) || {
 					rule: 'includes',
 					message:
-						customMessage ?? `Not all characters of ${data} are lowercase`,
+						customMessage ?? `Not all characters of "${data}" are lowercase`,
 					code: customCode ?? 'NOT_ALL_LOWERCASE',
 					meta: {
 						expected: `all lowercase`,
@@ -172,7 +211,7 @@ class StringSchema extends BasePrimitiveSchema {
 				/^\p{L}+$/u.test(data) || {
 					rule: 'alphabets',
 					message:
-						customMessage ?? `Not all characters of ${data} are alphabets`,
+						customMessage ?? `Not all characters of "${data}" are alphabets`,
 					code: customCode ?? 'NOT_ALL_ALPHABETS',
 					meta: {
 						expected: `all alphabets`,
@@ -190,7 +229,8 @@ class StringSchema extends BasePrimitiveSchema {
 			(data: any): CheckFnReturnType =>
 				/^-?\d+(\.\d+)?$/.test(data) || {
 					rule: 'numbers',
-					message: customMessage ?? `Not all characters of ${data} are numbers`,
+					message:
+						customMessage ?? `Not all characters of "${data}" are numbers`,
 					code: customCode ?? 'NOT_ALL_NUMBERS',
 					meta: {
 						expected: `all numbers`,

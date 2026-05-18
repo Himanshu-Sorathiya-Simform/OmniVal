@@ -1,3 +1,4 @@
+import { validateParameterType } from '../helpers/helpers.js';
 import type {
 	CheckFn,
 	CheckFnReturnType,
@@ -27,13 +28,17 @@ abstract class BasePrimitiveSchema {
 	equals(val: any, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
+		validateParameterType({
+			rule: 'equals',
+			passedValue: val,
+			typeOfParameterRequired: this.type,
+		});
+
 		this.checks.push(
 			(data: any): CheckFnReturnType =>
 				Object.is(val, data) || {
 					rule: 'equals',
-					message:
-						customMessage ??
-						`${Object.is(data, -0) ? '-0' : data} is not equal to ${val}`,
+					message: customMessage ?? `${data} is not equal to ${val}`,
 					code: customCode ?? 'NOT_EQUAL',
 					meta: {
 						expected: `Equals to ${val}`,
