@@ -3,9 +3,10 @@ import type { NumberSchema } from './schemas/NumberSchema.js';
 import type { ObjectSchema } from './schemas/ObjectSchema.js';
 import type { StringSchema } from './schemas/StringSchema.js';
 
-interface ObjectShape {
-	[key: string]: StringSchema | BooleanSchema | NumberSchema | ObjectSchema;
-}
+type ObjectShape = Record<
+	string,
+	StringSchema | BooleanSchema | NumberSchema | ObjectSchema
+>;
 
 interface PrimitiveErrorObject {
 	rule: string;

@@ -14,6 +14,10 @@ class ObjectSchema {
 	}
 
 	protected validateType(data: any): CheckFnReturnType {
+		if (this.shape === undefined || this.shape === null) {
+			throw new Error('Please provide a shape in object method.');
+		}
+
 		if (data === null || Array.isArray(data)) {
 			return {
 				rule: 'type',
