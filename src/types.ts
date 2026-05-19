@@ -14,36 +14,35 @@ interface PrimitiveErrorObject {
 	meta: object;
 }
 
-interface NonPrimitiveErrorObject {
-	path: string;
-	errors: PrimitiveErrorObject[] | NonPrimitiveErrorObject[];
+interface NonPrimitiveErrorObject extends PrimitiveErrorObject {
+	path?: string;
 }
 
 type PrimitiveValidateFnReturnType =
 	| {
-			isValid: boolean;
+			isValid: true;
 			data: any;
 			errors?: never;
 	  }
 	| {
-			isValid: boolean;
+			isValid: false;
 			errors: PrimitiveErrorObject[];
 			data?: never;
 	  };
 
 type NonPrimitiveValidateFnReturnType =
 	| {
-			isValid: boolean;
+			isValid: true;
 			data: any;
 			errors?: never;
 	  }
 	| {
-			isValid: boolean;
+			isValid: false;
 			errors: NonPrimitiveErrorObject[];
 			data?: never;
 	  };
 
-type CheckFnReturnType = true | PrimitiveErrorObject;
+type CheckFnReturnType = true | NonPrimitiveErrorObject;
 
 type CheckFn = (...args: any[]) => CheckFnReturnType;
 

@@ -14,14 +14,26 @@ class ObjectSchema {
 	}
 
 	protected validateType(data: any): CheckFnReturnType {
-		return (
-			(typeof data === this.type && data !== null && !Array.isArray(data)) || {
+		if (data === null || Array.isArray(data)) {
+			return {
 				rule: 'type',
-				message: `(${typeof data})(${data}) is not a valid ${this.type} type`,
+				message: `(${data}) is not a valid ${this.type} type`,
 				code: 'INVALID_TYPE',
 				meta: {
 					expected: this.type,
-					received: typeof data,
+					received: data,
+				},
+			};
+		}
+
+		return (
+			typeof data === this.type || {
+				rule: 'type',
+				message: `(${typeof data})(${data}) is not a ${this.type} type`,
+				code: 'INVALID_TYPE',
+				meta: {
+					expected: this.type,
+					received: data,
 				},
 			}
 		);
@@ -33,7 +45,7 @@ class ObjectSchema {
 		const typeCheck = this.validateType(data);
 
 		if (typeCheck !== true) {
-			errors.push({ path: 'root', errors: [typeCheck] });
+			errors.push(typeCheck);
 
 			return { isValid: false, errors };
 		}
@@ -46,31 +58,24 @@ class ObjectSchema {
 			!keysOfData.every((key) => this.shape[key])
 		) {
 			errors.push({
-				path: 'root',
-				errors: [
-					{
-						rule: 'keys',
-						message: `keys of [${keysOfData.join(', ')}] is not aligning with [${keysOfShape.join(', ')}] keys`,
-						code: 'INVALID_KEYS',
-						meta: {
-							expected: `same keys`,
-							received: data.keys,
-						},
-					},
-				],
+				rule: 'keys',
+				message: `keys of provided object [${keysOfData.join(', ')}] are not aligning with keys of shape [${keysOfShape.join(', ')}]`,
+				code: 'INVALID_KEYS',
+				meta: {
+					expected: `same keys`,
+					received: data.keys,
+				},
 			});
 
 			return { isValid: false, errors };
 		}
 
 		for (const key of keysOfData) {
-			const ans = this.shape[key] && this.shape[key].validate(data[key]);
+			const ans: NonPrimitiveValidateFnReturnType | undefined =
+				this.shape[key] && this.shape[key].validate(data[key]);
 
-			if (ans && ans.isValid === false && ans.errors) {
-				errors.push({
-					path: key,
-					errors: ans.errors,
-				});
+			if (ans && ans.isValid === false) {
+				errors.push(...ans.errors.map((err) => ({ path: key, ...err })));
 			}
 		}
 
