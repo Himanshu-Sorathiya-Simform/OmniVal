@@ -9,10 +9,17 @@ import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class StringSchema extends BasePrimitiveSchema {
 	protected type: string = 'string';
-	protected checks: Array<CheckFn> = [];
+
+	constructor(checks?: Array<CheckFn>) {
+		super(checks);
+	}
 
 	protected override validateType(data: any): CheckFnReturnType {
 		return super.validateType(data);
+	}
+
+	protected override clone(checks: Array<CheckFn>): this {
+		return new StringSchema(checks) as this;
 	}
 
 	minLength(val: number, params?: Params) {
@@ -24,7 +31,7 @@ class StringSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'number',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data.length >= val || {
 					rule: 'minLength',
@@ -38,8 +45,6 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	maxLength(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
@@ -50,7 +55,7 @@ class StringSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'number',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data.length <= val || {
 					rule: 'maxLength',
@@ -64,8 +69,6 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	length(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
@@ -76,7 +79,7 @@ class StringSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'number',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data.length === val || {
 					rule: 'length',
@@ -90,8 +93,6 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	startsWith(prefix: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
@@ -102,7 +103,7 @@ class StringSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'string',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data.startsWith(prefix) || {
 					rule: 'startsWith',
@@ -114,8 +115,6 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	endsWith(suffix: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
@@ -126,7 +125,7 @@ class StringSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'string',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data.endsWith(suffix) || {
 					rule: 'endsWith',
@@ -138,8 +137,6 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	includes(substring: string, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
@@ -150,7 +147,7 @@ class StringSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'string',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data.includes(substring) || {
 					rule: 'includes',
@@ -162,13 +159,11 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	uppercase(params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data.split('').every((char: string) => char === char.toUpperCase()) || {
 					rule: 'uppercase',
@@ -181,13 +176,11 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	lowercase(params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data.split('').every((char: string) => char === char.toLowerCase()) || {
 					rule: 'lowercase',
@@ -200,13 +193,11 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	alphabets(params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				/^\p{L}+$/u.test(data) || {
 					rule: 'alphabets',
@@ -219,13 +210,11 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	numbers(params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				/^-?\d+(\.\d+)?$/.test(data) || {
 					rule: 'numbers',
@@ -238,8 +227,6 @@ class StringSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 
 	override validate(data: any): PrimitiveValidateFnReturnType {

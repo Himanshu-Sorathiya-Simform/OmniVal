@@ -9,7 +9,14 @@ import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class NumberSchema extends BasePrimitiveSchema {
 	protected type: string = 'number';
-	protected checks: Array<CheckFn> = [];
+
+	constructor(checks?: Array<CheckFn>) {
+		super(checks);
+	}
+
+	protected override clone(checks: Array<CheckFn>): this {
+		return new NumberSchema(checks) as this;
+	}
 
 	protected override validateType(data: any): CheckFnReturnType {
 		if (Number.isNaN(data) || !Number.isFinite(data)) {
@@ -33,7 +40,7 @@ class NumberSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'number',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data >= val || {
 					rule: 'minValue',
@@ -45,8 +52,6 @@ class NumberSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	maxValue(val: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
@@ -57,7 +62,7 @@ class NumberSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'number',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data <= val || {
 					rule: 'maxValue',
@@ -69,13 +74,11 @@ class NumberSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	positive(params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data > 0 || {
 					rule: 'positive',
@@ -87,13 +90,11 @@ class NumberSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	negative(params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data < 0 || {
 					rule: 'negative',
@@ -105,13 +106,11 @@ class NumberSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	integer(params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				Number.isInteger(data) || {
 					rule: 'integer',
@@ -123,8 +122,6 @@ class NumberSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 	multipleOf(step: number, params?: Params) {
 		const { customMessage, customCode } = this.getCustomProperties(params);
@@ -135,7 +132,7 @@ class NumberSchema extends BasePrimitiveSchema {
 			typeOfParameterRequired: 'number',
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				data % step === 0 || {
 					rule: 'multipleOf',
@@ -147,8 +144,6 @@ class NumberSchema extends BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 
 	override validate(data: any): PrimitiveValidateFnReturnType {

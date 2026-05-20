@@ -7,7 +7,14 @@ import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 
 class BooleanSchema extends BasePrimitiveSchema {
 	protected type: string = 'boolean';
-	protected checks: Array<CheckFn> = [];
+
+	constructor(checks?: Array<CheckFn>) {
+		super(checks);
+	}
+
+	protected override clone(checks: Array<CheckFn>): this {
+		return new BooleanSchema(checks) as this;
+	}
 
 	protected override validateType(data: any): CheckFnReturnType {
 		return super.validateType(data);

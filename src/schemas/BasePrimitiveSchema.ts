@@ -9,7 +9,17 @@ import type {
 
 abstract class BasePrimitiveSchema {
 	protected abstract type: string;
-	protected abstract checks: Array<CheckFn>;
+	protected checks: Array<CheckFn>;
+
+	constructor(checks?: Array<CheckFn>) {
+		this.checks = checks ? [...checks] : [];
+	}
+
+	protected abstract clone(checks: Array<CheckFn>): this;
+
+	protected createNextInstance(newCheck: CheckFn): this {
+		return this.clone([...this.checks, newCheck]);
+	}
 
 	protected validateType(data: any): CheckFnReturnType {
 		return (
@@ -34,7 +44,7 @@ abstract class BasePrimitiveSchema {
 			typeOfParameterRequired: this.type,
 		});
 
-		this.checks.push(
+		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
 				Object.is(val, data) || {
 					rule: 'equals',
@@ -46,8 +56,6 @@ abstract class BasePrimitiveSchema {
 					},
 				},
 		);
-
-		return this;
 	}
 
 	validate(data: any): PrimitiveValidateFnReturnType {
