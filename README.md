@@ -23,10 +23,10 @@ npm install @himanshu-sorathiya/omnival
 
 ## Basic Usage
 
+### Primitive validations
+
 ```typescript
 import v from '@himanshu-sorathiya/omnival';
-
-// Primitive validations
 
 // Successful validation
 const result = v.number().positive().max(15).validate(10);
@@ -55,9 +55,11 @@ Returns:
   ]
 }
 */
+```
 
-// Object validations
+### Object validations
 
+```typescript
 // Successful validation
 const result = v
 	.object({
@@ -70,36 +72,50 @@ const result = v
 // Failed validation with multiple errors
 const failure = v
 	.object({
-		role: v.string().lowercase(),
-		stars: v.number().positive(),
+		id: v.string(),
+		organization: v.object({
+			name: v.string().minLength(5),
+			metrics: v.object({
+				revenue: v.number().minValue(10000),
+				employees: v.number().maxValue(100),
+			}),
+		}),
 	})
-	.validate({ role: 'ADMIN', stars: -3 });
+	.validate({
+		id: 'org_123',
+		organization: {
+			name: 'Ace',
+			metrics: {
+				revenue: 5000,
+				employees: 150,
+			},
+		},
+	});
 /*
 Returns:
 {
-  "isValid": false,
-  "errors": [
+  isValid: false,
+  errors: [
     {
-      "path": "role",
-      "errors": [
-        {
-          "rule": "lowercase",
-          "code": "NOT_LOWERCASE",
-          "message": "ADMIN contains uppercase characters",
-          "meta": { "expected": "lowercase string", "received": "ADMIN" }
-        }
-      ]
+      path: 'organization.name',
+      rule: 'minLength',
+      message: 'length of "Ace"(3) is smaller than required 5 length',
+      code: 'TOO_SHORT',
+      meta: [Object]
     },
     {
-      "path": "stars",
-      "errors": [
-        {
-          "rule": "positive",
-          "code": "NOT_POSITIVE",
-          "message": "-3 is not a positive number",
-          "meta": { "expected": "> 0", "received": -3 }
-        }
-      ]
+      path: 'organization.metrics.revenue',
+      rule: 'minValue',
+      message: '5000 is smaller than 10000',
+      code: 'TOO_SHORT',
+      meta: [Object]
+    },
+    {
+      path: 'organization.metrics.employees',
+      rule: 'maxValue',
+      message: '150 is bigger than 100',
+      code: 'TOO_LONG',
+      meta: [Object]
     }
   ]
 }
@@ -174,12 +190,13 @@ v.number().min(5, {
 
 When validation fails, the errors array contains objects with the following structure:
 
-| Property | Type   | Description                                           |
-| -------- | ------ | ----------------------------------------------------- |
-| rule     | string | The name of the rule that failed.                     |
-| message  | string | The error message (default or custom).                |
-| code     | string | The error code for programmatic handling.             |
-| meta     | object | Additional context (e.g., expected vs actual values). |
+| Property | Type   | Description                                              |
+| -------- | ------ | -------------------------------------------------------- |
+| path     | string | The path of the property that failed (Only for objects). |
+| rule     | string | The name of the rule that failed.                        |
+| message  | string | The error message (default or custom).                   |
+| code     | string | The error code for programmatic handling.                |
+| meta     | object | Additional context (e.g., expected vs actual values).    |
 
 ## License
 
