@@ -10,14 +10,14 @@ class ObjectSchema {
 	shape: ObjectShape = {};
 
 	constructor(shape: any) {
-		this.shape = shape;
-	}
-
-	protected validateType(data: any): CheckFnReturnType {
 		if (this.shape === undefined || this.shape === null) {
 			throw new Error('Please provide a shape in object method.');
 		}
 
+		this.shape = shape;
+	}
+
+	protected validateType(data: any): CheckFnReturnType {
 		if (data === null || Array.isArray(data)) {
 			return {
 				rule: 'type',
@@ -67,7 +67,7 @@ class ObjectSchema {
 				code: 'INVALID_KEYS',
 				meta: {
 					expected: `same keys`,
-					received: data.keys,
+					received: Object.keys(data),
 				},
 			});
 
@@ -79,7 +79,13 @@ class ObjectSchema {
 				this.shape[key] && this.shape[key].validate(data[key]);
 
 			if (ans && ans.isValid === false) {
-				errors.push(...ans.errors.map((err) => ({ path: key, ...err })));
+				errors.push(
+					...ans.errors.map((err) => {
+						const { path: oldPath, ...restErrorObj } = err;
+						const currPath = oldPath ? `${key}.${oldPath}` : key;
+						return { path: currPath, ...restErrorObj };
+					}),
+				);
 			}
 		}
 
