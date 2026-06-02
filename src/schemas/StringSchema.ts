@@ -10,16 +10,16 @@ import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 class StringSchema extends BasePrimitiveSchema {
 	protected type: string = 'string';
 
-	constructor(checks?: Array<CheckFn>) {
-		super(checks);
+	constructor(checks?: Array<CheckFn>, params?: Params) {
+		super(checks, params);
 	}
 
 	protected override validateType(data: any): CheckFnReturnType {
 		return super.validateType(data);
 	}
 
-	protected override clone(checks: Array<CheckFn>): this {
-		return new StringSchema(checks) as this;
+	protected override clone(checks: Array<CheckFn>, params?: Params): this {
+		return new StringSchema(checks, params) as this;
 	}
 
 	minLength(val: number, params?: Params) {

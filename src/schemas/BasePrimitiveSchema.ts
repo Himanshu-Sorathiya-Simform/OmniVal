@@ -10,23 +10,28 @@ import type {
 abstract class BasePrimitiveSchema {
 	protected abstract type: string;
 	protected checks: Array<CheckFn>;
+	protected params: Params;
 
-	constructor(checks?: Array<CheckFn>) {
+	constructor(checks?: Array<CheckFn>, params?: Params) {
 		this.checks = checks ? [...checks] : [];
+		this.params = params ?? '';
 	}
 
-	protected abstract clone(checks: Array<CheckFn>): this;
+	protected abstract clone(checks: Array<CheckFn>, params?: Params): this;
 
 	protected createNextInstance(newCheck: CheckFn): this {
-		return this.clone([...this.checks, newCheck]);
+		return this.clone([...this.checks, newCheck], this.params);
 	}
 
 	protected validateType(data: any): CheckFnReturnType {
+		const { customMessage, customCode } = this.getCustomProperties(this.params);
+
 		return (
 			typeof data === this.type || {
 				rule: 'type',
-				message: `(${typeof data})(${data}) is not a ${this.type}`,
-				code: 'INVALID_TYPE',
+				message:
+					customMessage ?? `(${typeof data})(${data}) is not a ${this.type}`,
+				code: customCode ?? 'INVALID_TYPE',
 				meta: {
 					expected: this.type,
 					received: typeof data,

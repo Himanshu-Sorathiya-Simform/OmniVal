@@ -1,8 +1,8 @@
 import type {
-	CheckFnReturnType,
-	NonPrimitiveErrorObject,
-	NonPrimitiveValidateFnReturnType,
-	ObjectShape,
+    CheckFnReturnType,
+    NonPrimitiveErrorObject,
+    NonPrimitiveValidateFnReturnType,
+    ObjectShape,
 } from '../types.js';
 
 class ObjectSchema {

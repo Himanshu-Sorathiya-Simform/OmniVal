@@ -10,12 +10,12 @@ import { BasePrimitiveSchema } from './BasePrimitiveSchema.js';
 class NumberSchema extends BasePrimitiveSchema {
 	protected type: string = 'number';
 
-	constructor(checks?: Array<CheckFn>) {
-		super(checks);
+	constructor(checks?: Array<CheckFn>, params?: Params) {
+		super(checks, params);
 	}
 
-	protected override clone(checks: Array<CheckFn>): this {
-		return new NumberSchema(checks) as this;
+	protected override clone(checks: Array<CheckFn>, params?: Params): this {
+		return new NumberSchema(checks, params) as this;
 	}
 
 	protected override validateType(data: any): CheckFnReturnType {
