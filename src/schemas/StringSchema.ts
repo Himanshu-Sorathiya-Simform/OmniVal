@@ -165,7 +165,7 @@ class StringSchema extends BasePrimitiveSchema {
 
 		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
-				data.split('').every((char: string) => char === char.toUpperCase()) || {
+				data === data.toUpperCase() || {
 					rule: 'uppercase',
 					message:
 						customMessage ?? `Not all characters of "${data}" are uppercase`,
@@ -182,7 +182,7 @@ class StringSchema extends BasePrimitiveSchema {
 
 		return this.createNextInstance(
 			(data: any): CheckFnReturnType =>
-				data.split('').every((char: string) => char === char.toLowerCase()) || {
+				data === data.toLowerCase() || {
 					rule: 'lowercase',
 					message:
 						customMessage ?? `Not all characters of "${data}" are lowercase`,

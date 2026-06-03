@@ -1,16 +1,16 @@
 import type {
-    CheckFnReturnType,
-    NonPrimitiveErrorObject,
-    NonPrimitiveValidateFnReturnType,
-    ObjectShape,
+	CheckFnReturnType,
+	NonPrimitiveErrorObject,
+	NonPrimitiveValidateFnReturnType,
+	ObjectShape,
 } from '../types.js';
 
 class ObjectSchema {
 	protected type: string = 'object';
-	shape: ObjectShape = {};
+	shape: ObjectShape;
 
 	constructor(shape: any) {
-		if (this.shape === undefined || this.shape === null) {
+		if (shape === undefined || shape === null) {
 			throw new Error('Please provide a shape in object method.');
 		}
 
@@ -59,7 +59,7 @@ class ObjectSchema {
 
 		if (
 			keysOfData.length !== keysOfShape.length ||
-			!keysOfData.every((key) => this.shape[key])
+			!keysOfData.every((key) => Object.hasOwn(this.shape, key))
 		) {
 			errors.push({
 				rule: 'keys',

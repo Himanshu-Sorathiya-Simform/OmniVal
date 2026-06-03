@@ -10,11 +10,11 @@ import type {
 abstract class BasePrimitiveSchema {
 	protected abstract type: string;
 	protected checks: Array<CheckFn>;
-	protected params: Params;
+	protected params: Params | undefined;
 
 	constructor(checks?: Array<CheckFn>, params?: Params) {
 		this.checks = checks ? [...checks] : [];
-		this.params = params ?? '';
+		this.params = params;
 	}
 
 	protected abstract clone(checks: Array<CheckFn>, params?: Params): this;

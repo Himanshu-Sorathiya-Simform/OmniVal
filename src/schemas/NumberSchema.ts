@@ -19,11 +19,25 @@ class NumberSchema extends BasePrimitiveSchema {
 	}
 
 	protected override validateType(data: any): CheckFnReturnType {
+		const { customMessage, customCode } = this.getCustomProperties(this.params);
+
+		if (typeof data !== 'number') {
+			return {
+				rule: 'type',
+				code: customCode ?? 'INVALID_TYPE',
+				message:
+					customMessage ?? `(${typeof data})(${data}) is not a ${this.type}`,
+				meta: { expected: this.type, received: typeof data },
+			};
+		}
+
 		if (Number.isNaN(data) || !Number.isFinite(data)) {
 			return {
 				rule: 'type',
-				code: 'INVALID_TYPE',
-				message: `(${typeof data})(${data}) is not a valid ${this.type}`,
+				code: customCode ?? 'INVALID_TYPE',
+				message:
+					customMessage ??
+					`(${typeof data})(${data}) is not a valid ${this.type}`,
 				meta: { expected: 'valid number', received: data },
 			};
 		}
